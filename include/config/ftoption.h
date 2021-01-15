@@ -133,7 +133,7 @@ FT_BEGIN_HEADER
   /* Note that if your compiler or CPU is not supported, this will default */
   /* to the standard and portable implementation found in `ftcalc.c'.      */
   /*                                                                       */
-#define FT_CONFIG_OPTION_INLINE_MULFIX
+/*#define FT_CONFIG_OPTION_INLINE_MULFIX*/
 
 
   /*************************************************************************/
@@ -148,7 +148,7 @@ FT_BEGIN_HEADER
   /*                                                                       */
   /*   Define this macro if you want to enable this `feature'.             */
   /*                                                                       */
-#define FT_CONFIG_OPTION_USE_LZW
+/*#define FT_CONFIG_OPTION_USE_LZW*/
 
 
   /*************************************************************************/
@@ -163,7 +163,7 @@ FT_BEGIN_HEADER
   /*   Define this macro if you want to enable this `feature'.  See also   */
   /*   the macro FT_CONFIG_OPTION_SYSTEM_ZLIB below.                       */
   /*                                                                       */
-#define FT_CONFIG_OPTION_USE_ZLIB
+/*#define FT_CONFIG_OPTION_USE_ZLIB*/
 
 
   /*************************************************************************/
@@ -305,7 +305,7 @@ FT_BEGIN_HEADER
   /*   You would normally undefine this configuration macro when building  */
   /*   a version of FreeType that doesn't contain a Type 1 or CFF driver.  */
   /*                                                                       */
-#define FT_CONFIG_OPTION_POSTSCRIPT_NAMES
+/*#define FT_CONFIG_OPTION_POSTSCRIPT_NAMES*/
 
 
   /*************************************************************************/
@@ -323,7 +323,7 @@ FT_BEGIN_HEADER
   /*   able to synthesize a Unicode charmap out of the glyphs found in the */
   /*   fonts.                                                              */
   /*                                                                       */
-#define FT_CONFIG_OPTION_ADOBE_GLYPH_LIST
+/*#define FT_CONFIG_OPTION_ADOBE_GLYPH_LIST*/
 
 
   /*************************************************************************/
@@ -336,7 +336,7 @@ FT_BEGIN_HEADER
   /*                                                                       */
   /*   Note that the `FOND' resource isn't checked.                        */
   /*                                                                       */
-#define FT_CONFIG_OPTION_MAC_FONTS
+/*#define FT_CONFIG_OPTION_MAC_FONTS*/
 
 
   /*************************************************************************/
@@ -370,7 +370,7 @@ FT_BEGIN_HEADER
   /* supply font data incrementally as the document is parsed, such        */
   /* as the Ghostscript interpreter for the PostScript language.           */
   /*                                                                       */
-#define FT_CONFIG_OPTION_INCREMENTAL
+/*#define FT_CONFIG_OPTION_INCREMENTAL*/
 
 
   /*************************************************************************/
@@ -514,7 +514,7 @@ FT_BEGIN_HEADER
   /* embedded bitmaps in all formats using the SFNT module (namely         */
   /* TrueType & OpenType).                                                 */
   /*                                                                       */
-#define TT_CONFIG_OPTION_EMBEDDED_BITMAPS
+/*#define TT_CONFIG_OPTION_EMBEDDED_BITMAPS*/
 
 
   /*************************************************************************/
@@ -529,7 +529,7 @@ FT_BEGIN_HEADER
   /*                                                                       */
   /* (By default, the module uses `PSNames' to extract glyph names.)       */
   /*                                                                       */
-#define TT_CONFIG_OPTION_POSTSCRIPT_NAMES
+/*#define TT_CONFIG_OPTION_POSTSCRIPT_NAMES*/
 
 
   /*************************************************************************/
@@ -543,7 +543,7 @@ FT_BEGIN_HEADER
   /* Accessing SFNT names is done through the functions declared in        */
   /* `ftsnames.h'.                                                         */
   /*                                                                       */
-#define TT_CONFIG_OPTION_SFNT_NAMES
+/*#define TT_CONFIG_OPTION_SFNT_NAMES*/
 
 
   /*************************************************************************/
@@ -582,7 +582,7 @@ FT_BEGIN_HEADER
   /*   Do not #undef this macro here, since the build system might         */
   /*   define it for certain configurations only.                          */
   /*                                                                       */
-#define TT_CONFIG_OPTION_BYTECODE_INTERPRETER
+/*#define TT_CONFIG_OPTION_BYTECODE_INTERPRETER*/
 
 
   /*************************************************************************/
@@ -667,7 +667,7 @@ FT_BEGIN_HEADER
   /* Note however that on some compiler/processor combinations, undefining */
   /* this macro will generate faster, though larger, code.                 */
   /*                                                                       */
-#define TT_CONFIG_OPTION_INTERPRETER_SWITCH
+/*#define TT_CONFIG_OPTION_INTERPRETER_SWITCH*/
 
 
   /*************************************************************************/
@@ -686,7 +686,7 @@ FT_BEGIN_HEADER
   /*   http://www.microsoft.com/typography/otspec/glyf.htm                 */
   /*   http://fonts.apple.com/TTRefMan/RM06/Chap6glyf.html                 */
   /*                                                                       */
-#undef TT_CONFIG_OPTION_COMPONENT_OFFSET_SCALED
+/*#undef TT_CONFIG_OPTION_COMPONENT_OFFSET_SCALED*/
 
 
   /*************************************************************************/
@@ -696,7 +696,7 @@ FT_BEGIN_HEADER
   /* and avar tables).  This has many similarities to Type 1 Multiple      */
   /* Masters support.                                                      */
   /*                                                                       */
-#define TT_CONFIG_OPTION_GX_VAR_SUPPORT
+/*#define TT_CONFIG_OPTION_GX_VAR_SUPPORT*/
 
 
   /*************************************************************************/
@@ -704,7 +704,7 @@ FT_BEGIN_HEADER
   /* Define TT_CONFIG_OPTION_BDF if you want to include support for        */
   /* an embedded `BDF ' table within SFNT-based bitmap formats.            */
   /*                                                                       */
-#define TT_CONFIG_OPTION_BDF
+/*#define TT_CONFIG_OPTION_BDF*/
 
 
   /*************************************************************************/
@@ -819,13 +819,13 @@ FT_BEGIN_HEADER
   /* Compile autofit module with CJK (Chinese, Japanese, Korean) script    */
   /* support.                                                              */
   /*                                                                       */
-#define AF_CONFIG_OPTION_CJK
+/*#define AF_CONFIG_OPTION_CJK*/
 
   /*************************************************************************/
   /*                                                                       */
   /* Compile autofit module with Indic script support.                     */
   /*                                                                       */
-#define AF_CONFIG_OPTION_INDIC
+/*#define AF_CONFIG_OPTION_INDIC*/
 
   /*************************************************************************/
   /*                                                                       */
