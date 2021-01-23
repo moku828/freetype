@@ -6,7 +6,7 @@
                 "${workspaceFolder}/include"
             ],
             "defines": ["FT2_BUILD_LIBRARY"],
-            "compilerPath": "/usr/bin/gcc",
+            "compilerPath": "/usr/local/bin/gcc",
             "cStandard": "gnu17",
             "cppStandard": "c++17",
             "intelliSenseMode": "gcc-x64"
