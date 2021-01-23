@@ -35,6 +35,11 @@
 void* luna_malloc(long size);
 void luna_free(void* ptr);
 void* luna_realloc(void* ptr, long size);
+void* luna_fopen(const char* filename);
+long luna_fread(void* ptr, long size, long n, void* fp);
+long luna_fseek(void* fp, long offset);
+long luna_fstat(void* fp);
+void luna_fclose(void* fp);
 
 
   /*************************************************************************/
@@ -165,7 +170,7 @@ void* luna_realloc(void* ptr, long size);
   FT_CALLBACK_DEF( void )
   ft_ansi_stream_close( FT_Stream  stream )
   {
-    ft_fclose( STREAM_FILE( stream ) );
+    luna_fclose( STREAM_FILE( stream ) );
 
     stream->descriptor.pointer = NULL;
     stream->size               = 0;
@@ -210,9 +215,9 @@ void* luna_realloc(void* ptr, long size);
     file = STREAM_FILE( stream );
 
     if ( stream->pos != offset )
-      ft_fseek( file, offset, SEEK_SET );
+      luna_fseek( file, offset );
 
-    return (unsigned long)ft_fread( buffer, 1, count, file );
+    return (unsigned long)luna_fread( buffer, 1, count, file );
   }
 
 
@@ -235,7 +240,7 @@ void* luna_realloc(void* ptr, long size);
     stream->read               = NULL;
     stream->close              = NULL;
 
-    file = ft_fopen( filepathname, "rb" );
+    file = luna_fopen( filepathname );
     if ( !file )
     {
       FT_ERROR(( "FT_Stream_Open:"
@@ -244,16 +249,14 @@ void* luna_realloc(void* ptr, long size);
       return FT_THROW( Cannot_Open_Resource );
     }
 
-    ft_fseek( file, 0, SEEK_END );
-    stream->size = ft_ftell( file );
+    stream->size = luna_fstat( file );
     if ( !stream->size )
     {
       FT_ERROR(( "FT_Stream_Open:" ));
       FT_ERROR(( " opened `%s' but zero-sized\n", filepathname ));
-      ft_fclose( file );
+      luna_fclose( file );
       return FT_THROW( Cannot_Open_Stream );
     }
-    ft_fseek( file, 0, SEEK_SET );
 
     stream->descriptor.pointer = file;
     stream->read  = ft_ansi_stream_io;
