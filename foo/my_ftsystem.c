@@ -32,6 +32,9 @@
 #include FT_SYSTEM_H
 #include FT_ERRORS_H
 #include FT_TYPES_H
+void* luna_malloc(long size);
+void luna_free(void* ptr);
+void* luna_realloc(void* ptr, long size);
 
 
   /*************************************************************************/
@@ -65,50 +68,12 @@
   /* <Return>                                                              */
   /*    The address of newly allocated block.                              */
   /*                                                                       */
-typedef struct {
-  void* addr;
-  long size;
-} s_allocentry;
-s_allocentry alloctbl[1024];
-long size_max = 0;
-long cnt_max = 0;
   FT_CALLBACK_DEF( void* )
   ft_alloc( FT_Memory  memory,
             long       size )
   {
     FT_UNUSED( memory );
-    {
-      FILE *fp;
-      void* addr;
-      long size_inuse;
-      long cnt_inuse;
-      int i;
-      addr = ft_smalloc(size);
-      size_inuse = 0;
-      cnt_inuse = 0;
-      for (i = 0; i < sizeof(alloctbl) / sizeof(alloctbl[0]); i++)
-      {
-        if (alloctbl[i].addr == NULL)
-        {
-          alloctbl[i].addr = addr;
-          alloctbl[i].size = size;
-          break;
-        }
-      }
-      for (i = 0; i < sizeof(alloctbl) / sizeof(alloctbl[0]); i++)
-      {
-        size_inuse += alloctbl[i].size;
-        cnt_inuse += (alloctbl[i].size > 0) ? 1 : 0;
-      }
-      if (size_max < size_inuse) size_max = size_inuse;
-      if (cnt_max < cnt_inuse) cnt_max = cnt_inuse;
-      fp = fopen("memory.log", "a");
-      fprintf(fp, "alloc,%p,%ld,%ld,%ld,%ld,%ld\n", addr, size, cnt_inuse, size_inuse, cnt_max, size_max);
-      fclose(fp);
-      return addr;
-    }
-
-    return ft_smalloc( size );
+    return luna_malloc(size);
   }
 
 
@@ -138,42 +103,7 @@ long cnt_max = 0;
               long       new_size,
               void*      block )
   {
-    FT_UNUSED( memory );
-    FT_UNUSED( cur_size );
-    {
-      FILE *fp;
-      void* addr;
-      long size;
-      long size_inuse;
-      long cnt_inuse;
-      int i;
-      addr = NULL;
-      size = 0;
-      size_inuse = 0;
-      cnt_inuse = 0;
-      for (i = 0; i < sizeof(alloctbl) / sizeof(alloctbl[0]); i++)
-      {
-        if (alloctbl[i].addr == block)
-        {
-          addr = alloctbl[i].addr;
-          size = new_size;
-          alloctbl[i].size = new_size;
-          break;
-        }
-      }
-      for (i = 0; i < sizeof(alloctbl) / sizeof(alloctbl[0]); i++)
-      {
-        size_inuse += alloctbl[i].size;
-        cnt_inuse += (alloctbl[i].size > 0) ? 1 : 0;
-      }
-      if (size_max < size_inuse) size_max = size_inuse;
-      fp = fopen("memory.log", "a");
-      fprintf(fp, "realloc,%p,%ld,%ld,%ld,%ld,%ld\n", addr, size, cnt_inuse, size_inuse, cnt_max, size_max);
-      fclose(fp);
-      return ft_srealloc( block, new_size );
-    }
-
-    return ft_srealloc( block, new_size );
+    return luna_realloc(block, new_size);
   }
 
 
@@ -195,41 +125,7 @@ long cnt_max = 0;
            void*      block )
   {
     FT_UNUSED( memory );
-    {
-      FILE *fp;
-      void* addr;
-      long size;
-      long size_inuse;
-      long cnt_inuse;
-      int i;
-      addr = NULL;
-      size = 0;
-      size_inuse = 0;
-      cnt_inuse = 0;
-      for (i = 0; i < sizeof(alloctbl) / sizeof(alloctbl[0]); i++)
-      {
-        if (alloctbl[i].addr == block)
-        {
-          addr = alloctbl[i].addr;
-          size = alloctbl[i].size;
-          alloctbl[i].addr = NULL;
-          alloctbl[i].size = 0;
-          break;
-        }
-      }
-      for (i = 0; i < sizeof(alloctbl) / sizeof(alloctbl[0]); i++)
-      {
-        size_inuse += alloctbl[i].size;
-        cnt_inuse += (alloctbl[i].size > 0) ? 1 : 0;
-      }
-      fp = fopen("memory.log", "a");
-      fprintf(fp, "free,%p,%ld,%ld,%ld,%ld,%ld\n", addr, size, cnt_inuse, size_inuse, cnt_max, size_max);
-      fclose(fp);
-      ft_sfree( block );
-      return;
-    }
-
-    ft_sfree( block );
+    luna_free(block);
   }
 
 
@@ -315,12 +211,6 @@ long cnt_max = 0;
 
     if ( stream->pos != offset )
       ft_fseek( file, offset, SEEK_SET );
-    {
-      FILE *fp;
-      fp = fopen("stream.log", "a");
-      fprintf(fp, "read,%lx,%ld\n", offset, count);
-      fclose(fp);
-    }
 
     return (unsigned long)ft_fread( buffer, 1, count, file );
   }
@@ -388,28 +278,17 @@ long cnt_max = 0;
 
 #endif
 
-
+struct FT_MemoryRec_ memrec;
   /* documentation is in ftobjs.h */
 
   FT_BASE_DEF( FT_Memory )
   FT_New_Memory( void )
   {
-    FT_Memory  memory;
-
-
-    memory = (FT_Memory)ft_smalloc( sizeof ( *memory ) );
-    if ( memory )
-    {
-      memory->user    = 0;
-      memory->alloc   = ft_alloc;
-      memory->realloc = ft_realloc;
-      memory->free    = ft_free;
-#ifdef FT_DEBUG_MEMORY
-      ft_mem_debug_init( memory );
-#endif
-    }
-
-    return memory;
+    memrec.user = 0;
+    memrec.alloc = ft_alloc;
+    memrec.realloc = ft_realloc;
+    memrec.free = ft_free;
+    return &memrec;
   }
 
 
@@ -418,10 +297,7 @@ long cnt_max = 0;
   FT_BASE_DEF( void )
   FT_Done_Memory( FT_Memory  memory )
   {
-#ifdef FT_DEBUG_MEMORY
-    ft_mem_debug_done( memory );
-#endif
-    ft_sfree( memory );
+    FT_UNUSED( memory );
   }
 
 
